@@ -8,13 +8,17 @@ router.post('/register', adminAuth, subAdminController.register);
 router.post('/login', subAdminController.login);
 
 // CRUD (admin only)
-router.get('/', adminAuth, subAdminController.getAll,
-
-    
-) ;
+router.get('/', adminAuth, subAdminController.getAll) ;
 
 router.get('/:id', adminAuth, subAdminController.getOne);
 router.put('/:id', adminAuth, subAdminController.update);
 router.delete('/:id', adminAuth, subAdminController.delete);
 
-module.exports = router; 
+router.post('/request-password-reset', subAdminController.requestPasswordReset);
+router.post('/verify-otp', subAdminController.verifyOtp);
+router.post('/reset-password', subAdminController.resetPassword);
+
+router.post('/pay-rent', subAdminController.subadminRentPay);
+router.get('/rent-status', subAdminController.subadminRentStatus);
+
+module.exports = router;

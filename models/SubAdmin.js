@@ -14,6 +14,9 @@ const subAdminSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  otp: { type: String },
+  otpExpiry: { type: Date },
+  status: { type: String, enum: ['active', 'paused'], default: 'active' },
 });
 
 module.exports = mongoose.model("SubAdmin", subAdminSchema);
