@@ -5,6 +5,8 @@ const dotenv = require('dotenv');
 const adminRoutes = require('./routes/adminRoutes');
 const subAdminRoutes = require('./routes/subAdminRoutes');
 const postedIDRoutes = require('./routes/postedIDRoutes');
+const youtubeVideoRoutes = require('./routes/youtubeVideoRoutes');
+const telegramLinkRoutes = require('./routes/telegramLinkRoutes');
 const path = require("path");
 dotenv.config();
 
@@ -39,6 +41,8 @@ app.get('/', (req, res) => {
 app.use('/api/admin', adminRoutes);
 app.use('/api/subadmin', subAdminRoutes);
 app.use('/api/ids', postedIDRoutes);
+app.use('/api/youtube-videos', youtubeVideoRoutes);
+app.use('/api/telegram-links', telegramLinkRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);

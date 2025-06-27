@@ -15,9 +15,9 @@ const subAdminSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  telegram: {
-    type: String,
-  },
+  // telegram: {
+  //   type: String,
+  // },
   otp: { type: String },
   otpExpiry: { type: Date },
   status: { type: String, enum: ['active', 'paused'], default: 'active' },

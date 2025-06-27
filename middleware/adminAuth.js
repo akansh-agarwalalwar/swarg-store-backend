@@ -9,12 +9,12 @@ module.exports = function (req, res, next) {
   const token = authHeader.split(' ')[1];
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
-    if (!decoded || decoded.role !== 'admin') {
-      return res.status(401).json({ message: 'Not authorized as admin' });
+    if (!decoded || (decoded.role !== 'admin' && decoded.role !== 'subadmin')) {
+      return res.status(401).json({ message: 'Not authorized as admin or subadmin' });
     }
     req.user = decoded;
     next();
   } catch (err) {
     return res.status(401).json({ message: 'Invalid token' });
   }
-}; 
+};
