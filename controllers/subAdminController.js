@@ -18,7 +18,7 @@ async function pauseAllPostedIDsBySubAdmin(subadminId) {
 exports.register = async (req, res) => {
   try {
     const { username, password, email } = req.body;
-    console.log(username, password, email)
+    // console.log(username, password, email)
     if (!username || !password || !email) {
       return res.status(400).json({ message: 'Username, password, and email are required.' });
     }

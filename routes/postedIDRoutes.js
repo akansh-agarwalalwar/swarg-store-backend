@@ -1,20 +1,19 @@
-
 const express = require("express");
 const router = express.Router();
 const postedIDController = require("../controllers/postedIDController");
 const jwt = require("jsonwebtoken");
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 const upload = require("../config/upload")
-
+const adminAuth = require("../middleware/adminAuth");
 
 function adminOrSubadminAuth(req, res, next) {
   const authHeader = req.headers.authorization;
-  console.log(authHeader)
+  // console.log(authHeader)
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return res.status(401).json({ message: "No token provided" });
   }
   const token = authHeader.split(" ")[1];
-  console.log(token)
+  // console.log(token)
   try {
     const decoded = jwt.verify(token, JWT_SECRET);
     if (!decoded || (decoded.role !== "admin" && decoded.role !== "subadmin")) {
@@ -34,6 +33,8 @@ router.post(
 );
 router.get("/", postedIDController.getAll);
 
+router.get("/my",adminAuth, postedIDController.getMyPostedIDs )
+
 router.get("/:id", postedIDController.getOne);
 
 router.patch('/:id/status', adminOrSubadminAuth, postedIDController.updateStatus);
@@ -45,7 +46,6 @@ router.put('/:id', adminOrSubadminAuth,
     postedIDController.updateID
 );
 
-router.get("/my",adminOrSubadminAuth, postedIDController.getMyPostedIDs )
+router.delete('/:id', adminOrSubadminAuth, postedIDController.deleteID);
 
 module.exports = router;
-
