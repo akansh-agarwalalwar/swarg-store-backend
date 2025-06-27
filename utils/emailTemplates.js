@@ -14,7 +14,7 @@ const transporter = nodemailer.createTransport({
 // Reusable function to send an email
 async function sendEmail({ to, subject, html }) {
   return transporter.sendMail({
-    from: process.env.FROM_EMAIL || 'no-reply@example.com',
+    from: '"Swargstore" <akanshagarwal.alwar@gmail.com>',
     to,
     subject,
     html,
@@ -43,7 +43,7 @@ function subAdminWelcomeTemplate({ username, password }) {
 async function sendSubAdminWelcomeEmail({ to, username, password }) {
   return sendEmail({
     to,
-    subject: 'Welcome to the Platform - Subadmin Access',
+    subject: 'Welcome to the Swargstore - Admin Access',
     html: subAdminWelcomeTemplate({ username, password }),
   });
 }

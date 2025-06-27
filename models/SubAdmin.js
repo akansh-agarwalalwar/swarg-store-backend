@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const subAdminSchema = new mongoose.Schema({
@@ -13,6 +14,9 @@ const subAdminSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
+  },
+  telegram: {
+    type: String,
   },
   otp: { type: String },
   otpExpiry: { type: Date },

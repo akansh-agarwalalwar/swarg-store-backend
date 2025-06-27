@@ -8,7 +8,7 @@ router.post('/register', adminAuth, subAdminController.register);
 router.post('/login', subAdminController.login);
 
 // CRUD (admin only)
-router.get('/', adminAuth, subAdminController.getAll) ;
+router.get('/get-all', adminAuth, subAdminController.getAll) ;
 
 router.get('/:id', adminAuth, subAdminController.getOne);
 router.put('/:id', adminAuth, subAdminController.update);

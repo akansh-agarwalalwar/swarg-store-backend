@@ -1,9 +1,10 @@
+
 const PostedID = require('../models/PostedID');
-const path = require('path');
 
 exports.create = async (req, res) => {
   try {
     const { title, price, description } = req.body;
+    console.log(title)
     if (!title || !price) {
       return res.status(400).json({ message: 'Title and price are required.' });
     }
@@ -128,3 +129,25 @@ exports.updateID = async (req, res) => {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
 };
+
+
+exports.getMyPostedIDs = async (req, res) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({ message: 'Not authorized' });
+    }
+
+    console.log('Logged user:', req.user);
+
+    const ids = await PostedID.find({ postedBy: req.user.id }).sort({ createdAt: -1 });
+    // or if necessary: 
+    // const ids = await PostedID.find({ postedBy: mongoose.Types.ObjectId(req.user.id) }).sort({ createdAt: -1 });
+
+    console.log('Found posted IDs:', ids.length);
+    res.json(ids);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+};
+
+
