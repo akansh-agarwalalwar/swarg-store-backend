@@ -6,6 +6,11 @@ const adminAuth = require('../middleware/adminAuth');
 // Get all telegram links (public)
 router.get('/', telegramLinkController.getLinks);
 
+// Subadmin telegram link CRUD operations
+router.get('/subadmin', adminAuth, telegramLinkController.getSubAdminLink);
+router.post('/subadmin', adminAuth, telegramLinkController.createOrUpdateSubAdminLink);
+router.delete('/subadmin', adminAuth, telegramLinkController.deleteSubAdminLink);
+
 // Add a telegram link (admin/subadmin only)
 router.post('/', adminAuth, telegramLinkController.addLink);
 

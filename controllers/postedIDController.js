@@ -1,4 +1,7 @@
 const PostedID = require('../models/PostedID');
+const TelegramLink = require('../models/TelegramLink');
+const Admin = require('../models/Admin');
+const SubAdmin = require('../models/SubAdmin');
 
 exports.create = async (req, res) => {
   try {
@@ -52,8 +55,30 @@ exports.create = async (req, res) => {
 
 exports.getAll = async (req, res) => {
   try {
+    // Fetch all posted IDs
     const ids = await PostedID.find().sort({ createdAt: -1 });
-    res.json(ids);
+    // For each posted ID, fetch the telegram link and user data for the user who posted it
+    const idsWithTelegram = await Promise.all(ids.map(async (id) => {
+      const telegram = await TelegramLink.findOne({
+        addedBy: id.postedBy,
+        addedByRole: id.role
+      });
+      
+      // Fetch user data based on role
+      let userData = null;
+      if (id.role === 'Admin') {
+        userData = await Admin.findById(id.postedBy);
+      } else if (id.role === 'SubAdmin') {
+        userData = await SubAdmin.findById(id.postedBy);
+      }
+      
+      return {
+        ...id.toObject(),
+        telegramLink: telegram ? telegram.link : null,
+        postedBy: userData ? { username: userData.username, email: userData.email } : { username: 'Unknown', email: 'Unknown' }
+      };
+    }));
+    res.json(idsWithTelegram);
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
