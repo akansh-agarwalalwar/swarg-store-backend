@@ -25,12 +25,17 @@ function adminOrSubadminAuth(req, res, next) {
     return res.status(401).json({ message: "Invalid token" });
   }
 }
+
 router.post(
   "/create",
   adminOrSubadminAuth,
-  upload.fields([{ name: "image", maxCount: 10 }]),
+  upload.fields([
+    { name: "image", maxCount: 10 },
+    { name: "video", maxCount: 5 }
+  ]),
   postedIDController.create
 );
+
 router.get("/", postedIDController.getAll);
 
 router.get("/my",adminAuth, postedIDController.getMyPostedIDs )

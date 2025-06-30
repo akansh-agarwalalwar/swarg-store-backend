@@ -2,6 +2,8 @@ const PostedID = require('../models/PostedID');
 const TelegramLink = require('../models/TelegramLink');
 const Admin = require('../models/Admin');
 const SubAdmin = require('../models/SubAdmin');
+const fs = require('fs');
+const path = require('path');
 
 exports.create = async (req, res) => {
   try {
@@ -178,7 +180,22 @@ exports.deleteID = async (req, res) => {
     const { id } = req.params;
     const deleted = await PostedID.findByIdAndDelete(id);
     if (!deleted) return res.status(404).json({ message: 'ID not found' });
-    res.json({ message: 'ID deleted' });
+
+    // Delete associated media files
+    if (deleted.media && Array.isArray(deleted.media)) {
+      deleted.media.forEach(media => {
+        if (media.url && media.url.startsWith('/uploads/')) {
+          const filePath = path.join(__dirname, '..', '..', media.url);
+          fs.unlink(filePath, err => {
+            if (err && err.code !== 'ENOENT') {
+              console.error('Failed to delete file:', filePath, err.message);
+            }
+          });
+        }
+      });
+    }
+
+    res.json({ message: 'ID and associated media deleted' });
   } catch (err) {
     res.status(500).json({ message: 'Server error', error: err.message });
   }
